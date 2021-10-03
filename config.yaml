@@ -1,0 +1,50 @@
+system:
+  env: develop # public
+  tls: true
+  cer: server.cer
+  key: server.key
+  addr: :8000
+  dbType: cassandra
+  transform:
+    queue: queue # chan redis(list)
+    capacity: 10000
+    retry: 3
+  zap:
+    level: 'debug' # info warn dpanic erro panic fatal
+    format: 'console' # json
+    prefix: '[OCTOPUS]'
+    directory: 'log'
+    link-name: 'latest_log'
+    show-line: true
+    encode-level: 'LowercaseColorLevelEncoder'
+    stacktrace-key: 'stacktrace'
+    log-in-console: true
+
+cassandra:
+  hosts:
+    - cassandra
+
+mysql:
+  host: mysql
+  config: charset=utf8mb4&parseTime=True&loc=Local&autocommit=1
+  dbName: octopus
+  user: root
+  pass: root
+  maxIdleConns: 10
+  maxOpenConns: 100
+  logMode: true
+
+redis:
+  host: 127.0.0.1:6379
+  db: 0
+  pass:
+  scheduler: list
+
+media:
+  instagram:
+    client_id: 1194736094299440
+    client_secret: a681bf17494b51159f3e11fc52a205a0
+  facebook:
+    app_key: 4772577762756482
+    app_secret: 8189b68474c228be8be5f9b26cd0ea70
+    redirect_uri: https://octopus.himalayaca.com/octopus/facebook/callback

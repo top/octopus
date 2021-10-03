@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  octopus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: octopus
+    restart: always
+    environment:
+      - GIN_MODE=release
+    volumes:
+      - ./log:/app/log
+    depends_on:
+      - redis
+      - mysql
+      - cassandra
+    ports:
+      - 8000:8000
+    networks:
+      - octopus
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - octopus
+
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ~/Develop/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=octopus
+      - MYSQL_ROOT_PASSWORD=root
+      - SERVICE_NAME=mysql
+    ports:
+      - 3306:3306
+    networks:
+      - octopus
+
+  cassandra:
+    image: cassandra
+    container_name: cassandra
+    restart: always
+    ports:
+      - 7000:7000
+      - 9042:9042
+    volumes:
+      - ~/Develop/cassandra:/var/lib/cassandra
+    environment:
+      - CASSANDRA_SEEDS=cassandra
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=cassandra
+      - MAX_HEAP_SIZE=2G
+      - HEAP_NEWSIZE=200M
+    networks:
+      - octopus
+
+networks:
+  octopus:
+    external: true
+    name: develop_default
