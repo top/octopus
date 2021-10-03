@@ -42,9 +42,9 @@ redis:
 
 media:
   instagram:
-    client_id: 1194736094299440
-    client_secret: a681bf17494b51159f3e11fc52a205a0
+    client_id:
+    client_secret:
   facebook:
-    app_key: 4772577762756482
-    app_secret: 8189b68474c228be8be5f9b26cd0ea70
+    app_key:
+    app_secret:
     redirect_uri: https://octopus.himalayaca.com/octopus/facebook/callback
